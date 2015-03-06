@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>"Advanced" Python</title>
+
+		<meta name="description" content="Advanced Python workshop at NICAR 2015">
+		<meta name="author" content="Geoff Hing">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/solarized.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>"Advanced" Python</h1>
+					<h3>NICAR 2015</h3>
+					<p>
+						<small><a href="https://github.com/ghing">Geoff Hing</a> / <a href="https://twitter.com/geoffhing">@geoffhing</a></small>
+					</p>
+				</section>
+
+                <section data-background="img/watercolor_map.jpg">
+                  <h1>Where we're going</h1>
+                  <ul>
+                    <li>Test-driven development (TDD)</li>
+                    <li>Object oriented design</li>
+                    <li>Functional programming</li>
+                  </ul>  
+                </section>
+
+
+                <section>
+                  <h1>Getting started</h1>
+                  <pre>
+                    <code class="bash">
+git clone https://github.com/ghing/nicar_2015_advanced_python.git
+mkvirtualenv nicar_2015_advanced_python
+cd nicar_2015_advanced_python
+pip install -r requirements.txt
+                    </code>
+                  </pre>
+                </section>
+
+                <section>
+                  <h1>Test driven development (TDD)</h1>
+                  <ol>
+                    <li>Write (failing) test</li>
+                    <li>Make it pass</li>
+                    <li>Refactor</li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h1>Test driven development (TDD)</h1>
+                  <ul>
+                    <li>unit tests</li>
+                    <li>test case</li>
+                    <li>test runner</li>
+                    <li>assertion</li>
+                  </ul>  
+                </section>
+
+                <section>
+                  <h1>On deadline?!?</h1>
+
+                  <ul>
+                    <li>Simple designs</li>
+                    <li>Confidence</li>
+                    <li>Ch-ch-ch-ch-changes</li>
+                    <li>Manual testing is slow</li>
+                  </ul>
+
+                  <aside class="notes">
+                  If you look at open-source projects on GitHub, you'll often see indicators of test coverage for the code base (the percentage of functions, statements, branches or conditions that have tests written for them).  It seems unimaginable to be able to get good test coverage in a newsroom environment with simultaneous, short-lived projects on deadline.
+
+                  However, testing is often a worthwhile investment.
+
+                  * Helps you reason about your design
+                  * Better to quickly test the parts that you're uncertain about directly than re-running an entire module
+                  * Finding and fixing bugs in production code sucks
+                  * Save time testing or worrying about changes later (or worse, not making changes for fear of breaking)
+
+                  In my work at the Tribune I usually:
+
+                  * Test the hard parts
+                  * Write tests to get unstuck, warm up
+                  * Write imaginary tests (don't actually write tests but think about how you would)
+                  </aside>
+                </section>
+
+                <section>
+                   <h1>Testing tools</h1>
+                   <ul>
+                     <li><a href="https://docs.python.org/2/library/unittest.html">unittest</a></li>
+                     <li><a href="https://nose.readthedocs.org/">nose</a></li>
+                   </ul>
+
+                   <aside class="notes">
+                     There are a wealth of tools for writing tests in Python as well as a variety of testing paradigms.  Today we'll focus on unit testing using the `unittest` package which is part of the Python Standard Library and `nose`, a test runner, framework and useful set of utilities for testing in Python.  
+                   </aside>
+                </section>
+
+                <section>
+                  <h1>Example Test</h1>
+                  <p><em><a href="https://github.com/onyxfish/csvkit/blob/master/tests/test_sql.py">tests/test_sql.py</a></em> from <a href="https://github.com/onyxfish/csvkit">csvkit</a></p>
+                  <pre>
+                    <code class="python">
+class TestSQL(unittest.TestCase):
+    def setUp(self):
+        # ...
+
+    def test_make_column_name(self):
+        c = sql.make_column(table.Column(0, 'test', [u'1', u'-87', u'418000000', u'']))
+        self.assertEqual(c.key, 'test')
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                  <h1>Let's run some tests</h1>
+                  <pre>
+                    <code class="bash">
+nosetests                    
+                    </code>
+                  </pre>
+
+                    <aside class="notes">
+                    We'll use nose's test runner to automatically discover and run tests in the `tests` directory. As it runs, it will give us a report of which tests passed and failed.
+                    </aside>
+                </section>
+
+                <section>
+                  <h1>Let's write a test</h1>
+                  Implement the <em>test_slugify_whitespace()</em> method in <em>tests/test_utils.py</em> to reflect the new requirements.
+                </section>
+
+                <section>
+                  <h1>Make it pass</h1>
+                  Implement <em>pycar_advanced.utils.slugify()</em> so your test passes!
+                </section>
+
+                <section>
+                  <h1>Object Oriented Design</h1>
+                  <ul>
+                    <li>Inheritance vs. Composition</li>
+                    <li>Multiple inheritance</li>
+                    <li>Mixin</li>
+                    <li>Delegation</li>
+                    <li>Magic Methods</li>
+                  </ul>
+
+                  <aside class="notes">
+                  Ask the audience for a definition of "object" oriented as a programming paradigm
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Inheritance vs. Composition</h1>
+                  <p><em>is a</em> vs. <em>has a</em></p>
+                </section>
+
+                <section>
+                  <h1>Inheritance</h1>
+
+                  <p><em><a href="https://github.com/pandaproject/panda/blob/master/panda/models/slugged_model.py">panda/models/slugged_model.py</a></em> from <a href="https://github.com/pandaproject/panda/">PANDA</a></p>
+
+                  <pre>
+                    <code class="python">
+from django.db import models
+
+class SluggedModel(models.Model):
+    slug = models.SlugField(_('slug'), max_length=256)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self.generate_unique_slug()  
+        
+        super(SluggedModel, self).save(*args, **kwargs)
+
+    def generate_unique_slug(self):
+        # ...
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                  <h1>Inheritance</h1>
+
+                  <p><em><a href="https://github.com/pandaproject/panda/blob/master/panda/models/dataset.py">panda/models/dataset.py</a></em> from <a href="https://github.com/pandaproject/panda/">PANDA</a></p>
+
+                  <pre>
+                    <code class="python">
+from panda.models.slugged_model import SluggedModel
+
+class Dataset(SluggedModel):
+    """
+    A PANDA dataset (one table & associated metadata).
+    """
+    name = models.CharField(_('name'), max_length=256,
+        help_text=_('User-supplied dataset name.'))
+    description = models.TextField(_('description'), blank=True,
+        help_text=_('User-supplied dataset description.'))
+    # ...
+
+    def save(self, *args, **kwargs):
+        """
+        Save the date of creation.
+        """
+        if not self.creation_date:
+            self.creation_date = now()
+
+        super(Dataset, self).save(*args, **kwargs)
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                  <h1>Inheritance</h1>
+                 
+                  <p><em>Dataset</em> is a <em>SluggedModel</em> is a <em>Model</em></p> 
+                </section>
+
+                <section>
+                  <h1>Multiple Inheritance</h1>
+                  <p><em><a href="https://github.com/datadesk/django-bakery/blob/master/bakery/views.py">bakery/views.py</a></em> from <a href="https://github.com/datadesk/django-bakery">Django Bakery</a></p>
+
+                  <pre>
+                    <code class="python">
+class BuildableMixin(object):
+    """
+    Common methods we will use in buildable views.
+    """
+    def get_content(self):
+       # ...
+
+    def prep_directory(self, path):
+       # ...
+
+    def build_file(self, path, html):
+       # ...
+
+    def write_file(self, path, html):
+       # ...
+                    </code>
+                  </pre>
+                </section>
+
+                <section>
+                  <h1>Multiple Inheritance</h1>
+                  <p><em><a href="https://github.com/datadesk/django-bakery/blob/master/bakery/views.py">bakery/views.py</a></em> from <a href="https://github.com/datadesk/django-bakery">Django Bakery</a></p>
+
+                  <pre>
+                    <code class="python">
+from django.views.generic import TemplateView
+
+class BuildableTemplateView(TemplateView, BuildableMixin):
+    @property
+    def build_method(self):
+        return self.build
+
+    def build(self):
+        logger.debug("Building %s" % self.template_name)
+        self.request = RequestFactory().get(self.build_path)
+        path = os.path.join(settings.BUILD_DIR, self.build_path)
+        self.prep_directory(self.build_path)
+        self.build_file(path, self.get_content())
+                    </code>
+                  </pre>
+
+                  <aside class="notes">
+                  The "mixin" pattern is a common use of multiple inheritance.  A "mixin" is a class that is always used as base class and is not intended to be instantiated directly.  Its methods are usually intended to be called by methods in the subclasses.
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Multiple Inheritance</h1>               
+                  <h2>Be careful!</h2>
+                  <pre>
+                    <code class="python">
+>>> class A(object):
+...     def whoami(self):
+...         print('A.whoami')
+...
+>>> class B(A):
+...     def whoami(self):
+...         print('B.whoami')
+...
+>>> class C(A):
+...     def whoami(self):
+...         print('C.whoami')
+...
+>>> class D(B, C):
+...     pass
+>>> D().whoami()
+B.whoami
+                    </code>
+                  </pre>    
+
+                  <aside class="notes">
+                  The selection of which implementation of an object's method is called the Method Resolution Order (MRO).  For simple class hierarchies, it's safe to say methods are resolved from left to right as the bases are specified in the class definition.  The actual algorithm used to resolve the MRO is called the "C3 superclass linearization" is pretty complex.  Generally, it's a good idea to keep the inheritance hierarchy simple when using multiple inheritance.  When combining complex functionalities, Composition might be a preferable design pattern.  
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Composition</h1>
+
+                  <p><em><a href="https://github.com/datadesk/python-elections/blob/master/elections/ap.py">elections/ap.py</a></em> from <a href="https://github.com/datadesk/python-elections/">python-elections</a>.
+
+                  <pre>
+                    <code class="python">
+class AP(object):
+    """
+    The public client you can use to connect to AP's data feed.
+    """
+    # ...
+
+class BaseAPResultCollection(object):
+    """
+    Base class that defines the methods to retrieve AP CSV
+    data
+    """
+    def __init__(self, client, name, results=True, delegates=True):
+        self.client = client
+        # ...
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                  <h1>Composition</h1>
+            
+                  <p>BaseAPResultCollection <em>has a</em> client (<em>AP</em>)</p>
+                </section>
+
+                <section>
+                  <h1>Composition</h1>
+
+                  <pre>
+                    <code class="python">
+class FilesystemAP(AP):
+    """
+    AP client that reads data from the filesystem instead of from the AP FTP
+    server
+    """
+    def __init__(self, results_path, username=None, password=None):
+        super(FilesystemAP, self).__init__(username, password)
+        self._results_path = results_path
+
+    @property
+    def ftp(self):
+        if not self._ftp:
+            self._ftp = MockFTP()
+
+        return self._ftp
+
+    def _fetch(self, path):
+        clean_path = path.lstrip('/')
+        full_path = os.path.join(self._results_path, clean_path)
+        return open(full_path)
+                    </code>
+                  </pre>
+              
+                  <aside class="notes">
+                    We can alter the behavior of BaseAPResultCollection by specifying a different type of object for client.  In this example, we have a client that loads files from the filesystem instead of a remote FTP server.
+                  </aside>
+                </section>
+
+                <section>
+                   <h1>Delegation</h1>
+
+                   <pre>
+                     <code class="python">
+class UpperOut(object):
+    def __init__(self, outfile):
+        self._outfile = outfile
+
+    def write(self, s):
+        self._outfile.write(s.upper())
+
+    def __getattr__(self, name):
+        return getattr(self._outfile, name)
+                     </code>
+                   </pre>
+                   
+                   <aside class="notes">
+                     Delegation is a design pattern based on composition where methods on the outer class call through to the member class unless overridden.
+
+                     In this example we implement the "magic method" `__getattr__` to get the requested attribute from the member class.
+                   </aside>
+                </section>
+
+                <section>
+                  <h1>Functional Programming</h1>
+                   
+                  <ul>
+                    <li>Iterators</li>
+                    <li>Generators</li>
+                    <li>List comprehensions</li>
+                    <li>Decorators</li>
+                  </ul>
+
+                  <aside class="notes">
+                    So far, we've looked at object-oriented features and design patterns in Python.  However, Python is a multi-paradigm language and we can also write code that is "functional".  The "functional" programming paradigm decomposes a task into a set of functions.  Functions should take only inputs and produce outputs and not have any side-effects.  Writing programs using the functional paradigm helps make code more modular, easier to test and easier to reason about.
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Iterators</h1>
+                  
+                  <ul>
+                      <li>A Python language feature</li>
+                      <li>Represent a stream of data</li>
+                      <li>Have a <em>next()</em> method</li>
+                      <li>Raise <em>StopIteration</em> when there are no more items</li>
+                  </ul>    
+                </section>
+
+                <section>
+                  <h1>Iterators</h1>
+         
+                  <pre>
+                    <code class="python">
+>>> L = [1,2,3]
+>>> it = iter(L)
+>>> it.next()
+1
+>>> it.next()
+2
+>>> it.next()
+3
+>>> it.next()
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+  StopIteration
+>>>
+                    </code>
+                  </pre>  
+                </section>   
+
+                <section>
+                   <h1>Generators</h1>
+
+                   <ul>
+                       <li>Return an iterator</li>
+                       <li>Functions that pick up where they left off</li>
+                       <li>Use <em>yield</em> rather than <em>return</em></li>
+                       <li>Can generate infinite sequences</li>
+                       <li>Use less memory</li>
+                   </ul>
+               </section>   
+
+                <section>
+                  <h1>Generators</h1>
+      
+                  <p><em><a href="https://github.com/pudo/dataset/blob/master/dataset/freeze/config.py">dataset/freeze/config.py</a></em> from <a href="https://github.com/pudo/dataset/">dataset</a>.
+
+                  <pre>
+                    <code class="python">
+class Configuration(object):
+    # ...
+
+    @property
+    def exports(self):
+        if not isinstance(self.data, dict):
+            raise FreezeException("The root element of the freeze file needs to be a hash")
+        if not isinstance(self.data.get('exports'), list):
+            raise FreezeException("The freeze file needs to have a list of exports")
+        common = self.data.get('common', {})
+        for export in self.data.get('exports'):
+            yield Export(common, export)
+                    </code>
+                  </pre>
+
+                  <aside class="notes">
+                    Dataset is a really useful Python package for loading structured data into a relational database, querying the data, and exporting the results.  It has a concept of a "freeze file" that defines queries that will be exported to CSV for JSON.  The exports method is a generator that returns an iterator of Export objects that encapsulate the configuration for the queries and export format.
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Let's make a generator</h1>
+
+                  <p>Implement the <em>generate_results()</em> function in <em>pycar_advanced/functional.py</em> so that the following command shows passing tests.</p>
+
+                  <pre>
+                    <code class="bash">
+nosetests \
+tests/test_functional.py:FunctionalTestCase.test_generate_results
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                  <h1>Filtering and transforming iterables</h1>
+                  <pre>
+                    <code class="python">
+>>> vals = [1, 2, 3]                    
+>>> map(lambda x: x*x, vals)    
+[1, 4, 9]
+>>> filter(lambda x: (x % 2) == 0, vals)
+[2]
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                   <h1>Lambda expressions</h1>
+                   <pre>
+                      <code class="python">
+>>> vals = [1, 2, 3]                    
+>>> map(lambda x: x*x, vals)    
+[1, 4, 9]
+>>> def square(x):
+>>>     return x*x
+>>> map(square, vals)
+[1, 4, 9]
+                      </code>
+                   </pre>
+
+                   <aside class="notes">
+                     Lambda expressions are a way to define small functions.  You can always just define the function, and in many cases, that's preferable.
+                   </aside>
+               </section>   
+
+               <section>
+                  <h1>List comprehensions</h1>
+
+                  <pre>
+                    <code class="python">
+>>> vals = [1, 2, 3]                    
+>>> [x * x for x in vals]
+[1, 4, 9]
+>>> [x for x in vals if (x % 2) == 0]
+[2]
+                    </code>
+                  </pre>  
+
+                  <aside class="notes">
+                    Python has a language feature called list comprehensions that are generally preferred to using map and filter.
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Let's use a list comprehension</h1>
+
+                  <p>Implement the <em>candidate_first_names()</em> function in <em>pycar_advanced/functional.py</em> using a list comprehension so that the following command shows passing tests:</p>
+
+                  <pre>
+                    <code class="bash">
+nosetests \
+tests/test_functional.py:FunctionalTestCase.test_candidate_first_names
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                  <h1>Generator expressions</h1>
+
+                  <pre>
+                    <code class="python">
+>>> vals = range(10)
+>>> even_iter = (x for x in vals if (x % 2) == 0)
+>>> even_iter.next()
+0
+>>> even_iter.next()
+2
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                  <h1>Generator expressions</h1>
+
+                  <pre>
+                    <code class="python">
+rahm = [r for r in results if r.candidate_name == "Rahm Emanuel"][0]                    
+rahm = next(r for r in results if r.candidate_name == "Rahm Emanuel")                    
+                    </code>
+                  </pre>  
+
+                  <aside class="notes">
+                    Generator expressions are a really great way to do a quick and dirty selection of an element.  What's the difference between these two examples?
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Functions are first class objects</h1>
+
+                  <pre>
+                    <code class="python">
+>>> def f(x):
+...     print(x)
+...
+>>> isinstance(f, object)
+True
+                    </code>
+                  </pre>   
+                </section>
+
+                <section>
+                  <h1>Functions can be arguments</h1>
+
+                  <pre>
+                    <code class="python">
+>>> from functools import reduce                    
+>>> def concat(s1, s2):
+>>>     return s1 + " " + s2
+>>> strgs = ["NICAR", "is", "great"]
+>>> reduce(concat, strgs)
+'NICAR is great'
+                    </code>
+                  </pre>   
+                </section>
+
+                <section>
+                  <h1>Functions definitions can be nested</h1>
+
+                  <pre>
+                    <code class="python">
+>>> def join(bits, sep=' '):
+...     def concat(s1, s2):
+...        return s1 + sep + s2
+...     return reduce(concat, bits)
+...
+>>> join(["NICAR", "is", "great"])
+'NICAR is great'
+>>> concat("NICAR", "is")
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+NameError: name 'concat' is not defined
+                    </code>
+                  </pre>  
+                </section>
+
+                <section>
+                  <h1>Functions can return functions</h1>
+                  <pre>
+                    <code class="python">
+>>> def get_name_fn(first_name, last_name):
+...     def name_fn():
+...         print("{} {}".format(first_name, last_name))
+...     return name_fn
+...
+>>> geoff = get_name_fn("Geoff", "Hing")
+>>> geoff()
+Geoff Hing
+                    </code>
+                  </pre>
+
+                  <aside class="notes">
+                    Just as functions can be arguments to other functions, functions can also return functions. This function returns a function that prints the name specified by the `first_name` and `last_name` arguments. 
+
+                    This is an example of a "closure".  The instance of `name_fn` remembers the enclosing namespace (i.e. the values of `first_name` and `last_name`) from when it was declared.
+
+                    FYI, [closures in Python are late-binding](http://docs.python-guide.org/en/latest/writing/gotchas/#late-binding-closures).
+                  </aside>
+                </section>  
+
+                <section>
+                  <h1>Decorators</h1>
+
+                  <p>From the Chicago Tribune's electioncenter2 Fabfile. Fabric makes <a href="http://fabric.readthedocs.org/en/1.8/api/core/decorators.html">heavy use of decorators</a>.</p>
+                  
+                  <pre>
+                    <code class="python">
+@roles('admin')
+def deploy():
+    require('branch', provided_by=BRANCH_PROVIDERS)
+    sync()
+    install_requirements()
+                    </code>
+                  </pre>
+
+                  <aside class="notes">
+                    This is an example of a Fabric task that we use to deploy our elections application.  It uses Fabric's `roles` decorator to define the hosts that this task will be run on. 
+                    From http://docs.python-guide.org/en/latest/writing/structure/#decorators:
+
+                    This mechanism is useful for separating concerns and avoiding external un-related logic ‘polluting’ the core logic of the function or method. A good example of a piece of functionality that is better handled with decoration is memoization or caching: you want to store the results of an expensive function in a table and use them directly instead of recomputing them when they have already been computed. This is clearly not part of the function logic.
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Decorators</h1>
+                  <pre>
+                    <code class="python">
+>>> def log_output(f):
+...     def inner():
+...         output = f()
+...         print(output)
+...     return inner
+...
+>>> def me():
+...     return "Geoff Hing"
+...
+>>> decorated = log_output(me)
+>>> decorated()
+Geoff Hing
+                    </code>
+                  </pre>  
+
+                </section>
+
+                <section>
+                  <h1>Decorators</h1>
+                  <pre>
+                    <code class="python">
+>>> @log_output
+... def me():
+...     return "Geoff Hing"
+...
+>>> me()
+Geoff Hing
+                    </code>
+                  </pre>  
+
+                  <aside class="notes">
+                    In the previous slide, we just called our decorator function to wrap the `me()` function, but Python offers special syntax for decorating functions. 
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Let's write a decorator!</h1>
+                </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
