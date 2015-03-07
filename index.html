@@ -43,18 +43,20 @@
 				<section>
 					<h1>"Advanced" Python</h1>
 					<h3>NICAR 2015</h3>
+                    <p><a href="http://ghing.github.io/nicar2015_advanced_python_slides/">http://bit.ly/advancedpycarslides</a></p>
+                    <p><a href="https://github.com/ghing/nicar2015_advanced_python">http://bit.ly/advancedpycar</a></p>
 					<p>
 						<small><a href="https://github.com/ghing">Geoff Hing</a> / <a href="https://twitter.com/geoffhing">@geoffhing</a></small>
 					</p>
 				</section>
 
-                <section data-background="img/watercolor_map.jpg">
+                <section>
                   <h1>Where we're going</h1>
                   <ul>
                     <li>Test-driven development (TDD)</li>
                     <li>Object oriented design</li>
                     <li>Functional programming</li>
-                  </ul>  
+                  </ul>
                 </section>
 
 
@@ -62,9 +64,9 @@
                   <h1>Getting started</h1>
                   <pre>
                     <code class="bash">
-git clone https://github.com/ghing/nicar_2015_advanced_python.git
-mkvirtualenv nicar_2015_advanced_python
-cd nicar_2015_advanced_python
+git clone https://github.com/ghing/nicar2015_advanced_python.git
+mkvirtualenv nicar2015_advanced_python
+cd nicar2015_advanced_python
 pip install -r requirements.txt
                     </code>
                   </pre>
@@ -86,7 +88,7 @@ pip install -r requirements.txt
                     <li>test case</li>
                     <li>test runner</li>
                     <li>assertion</li>
-                  </ul>  
+                  </ul>
                 </section>
 
                 <section>
@@ -122,10 +124,11 @@ pip install -r requirements.txt
                    <ul>
                      <li><a href="https://docs.python.org/2/library/unittest.html">unittest</a></li>
                      <li><a href="https://nose.readthedocs.org/">nose</a></li>
+                     <li><a href="http://www.voidspace.org.uk/python/mock/">mock</a></li>
                    </ul>
 
                    <aside class="notes">
-                     There are a wealth of tools for writing tests in Python as well as a variety of testing paradigms.  Today we'll focus on unit testing using the `unittest` package which is part of the Python Standard Library and `nose`, a test runner, framework and useful set of utilities for testing in Python.  
+                     There are a wealth of tools for writing tests in Python as well as a variety of testing paradigms.  Today we'll focus on unit testing using the `unittest` package which is part of the Python Standard Library and `nose`, a test runner, framework and useful set of utilities for testing in Python.
                    </aside>
                 </section>
 
@@ -142,14 +145,14 @@ class TestSQL(unittest.TestCase):
         c = sql.make_column(table.Column(0, 'test', [u'1', u'-87', u'418000000', u'']))
         self.assertEqual(c.key, 'test')
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
                   <h1>Let's run some tests</h1>
                   <pre>
                     <code class="bash">
-nosetests                    
+nosetests
                     </code>
                   </pre>
 
@@ -160,18 +163,25 @@ nosetests
 
                 <section>
                   <h1>Let's write a test</h1>
-                  Implement the <em>test_slugify_whitespace()</em> method in <em>tests/test_utils.py</em> to reflect the new requirements.
+                  Implement the <em>test_slugify_whitespace()</em> method in <em><a href="https://github.com/ghing/nicar2015_advanced_python/blob/master/tests/test_utils.py">tests/test_utils.py</a></em> to reflect the new requirements.
                 </section>
 
                 <section>
                   <h1>Make it pass</h1>
-                  Implement <em>pycar_advanced.utils.slugify()</em> so your test passes!
+                  Implement <em><a href="https://github.com/ghing/nicar2015_advanced_python/blob/master/pycar_advanced/utils.py#L3">pycar_advanced.utils.slugify()</a></em> so your test passes!
+
+                  <pre>
+                    <code class="bash">
+nosetests tests/test_utils.py
+                    </code>
+                  </pre>
                 </section>
 
                 <section>
                   <h1>Object Oriented Design</h1>
                   <ul>
-                    <li>Inheritance vs. Composition</li>
+                    <li>Inheritance</li>
+                    <li>Composition</li>
                     <li>Multiple inheritance</li>
                     <li>Mixin</li>
                     <li>Delegation</li>
@@ -186,6 +196,10 @@ nosetests
                 <section>
                   <h1>Inheritance vs. Composition</h1>
                   <p><em>is a</em> vs. <em>has a</em></p>
+
+                  <aside class="notes">
+                    <p>These are different ways of deciding how to share behavior between classes and how to modify that behavior.</p>
+                  </aside>
                 </section>
 
                 <section>
@@ -202,14 +216,14 @@ class SluggedModel(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = self.generate_unique_slug()  
-        
+            self.slug = self.generate_unique_slug()
+
         super(SluggedModel, self).save(*args, **kwargs)
 
     def generate_unique_slug(self):
         # ...
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
@@ -240,13 +254,17 @@ class Dataset(SluggedModel):
 
         super(Dataset, self).save(*args, **kwargs)
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
                   <h1>Inheritance</h1>
-                 
-                  <p><em>Dataset</em> is a <em>SluggedModel</em> is a <em>Model</em></p> 
+
+                  <p><em>Dataset</em> is a <em>SluggedModel</em> is a <em>Model</em></p>
+
+                  <aside class="notes">
+                    <p>Does anyone have examples of where they've used inheritance, or data entities or program components where inheritance seems like a natural fit?</p>
+                  </aside>
                 </section>
 
                 <section>
@@ -273,6 +291,7 @@ class BuildableMixin(object):
                     </code>
                   </pre>
                 </section>
+
 
                 <section>
                   <h1>Multiple Inheritance</h1>
@@ -302,33 +321,64 @@ class BuildableTemplateView(TemplateView, BuildableMixin):
                 </section>
 
                 <section>
-                  <h1>Multiple Inheritance</h1>               
+                  <h1>Let's use a mixin!</h1>
+                  <p>Use the <em>ResultsTestMixin</em> class to avoid duplicate code in the test case classes in <em><a href="https://github.com/ghing/nicar2015_advanced_python/blob/master/tests/test_oo.py">tests/tests_oo.py</a></em></p>.
+                </section>
+
+                <section>
+                  <h1>Multiple Inheritance</h1>
                   <h2>Be careful!</h2>
+
                   <pre>
                     <code class="python">
->>> class A(object):
-...     def whoami(self):
-...         print('A.whoami')
-...
->>> class B(A):
-...     def whoami(self):
-...         print('B.whoami')
-...
->>> class C(A):
-...     def whoami(self):
-...         print('C.whoami')
-...
->>> class D(B, C):
-...     pass
->>> D().whoami()
-B.whoami
+ >>> class A(object):
+ ...     def whoami(self):
+ ...         print('A.whoami')
+ ...
+ >>> class B(A):
+ ...     def whoami(self):
+ ...         print('B.whoami')
+ ...
+ >>> class C(A):
+ ...     def whoami(self):
+ ...         print('C.whoami')
+ ...
+ >>> class D(B, C):
+ ...     pass
+ >>> D().whoami()
                     </code>
-                  </pre>    
+                  </pre>
 
                   <aside class="notes">
-                  The selection of which implementation of an object's method is called the Method Resolution Order (MRO).  For simple class hierarchies, it's safe to say methods are resolved from left to right as the bases are specified in the class definition.  The actual algorithm used to resolve the MRO is called the "C3 superclass linearization" is pretty complex.  Generally, it's a good idea to keep the inheritance hierarchy simple when using multiple inheritance.  When combining complex functionalities, Composition might be a preferable design pattern.  
+                  The selection of which implementation of an object's method is called the Method Resolution Order (MRO).  For simple class hierarchies, it's safe to say methods are resolved from left to right as the bases are specified in the class definition.  The actual algorithm used to resolve the MRO is called the "C3 superclass linearization" is pretty complex.  Generally, it's a good idea to keep the inheritance hierarchy simple when using multiple inheritance.  When combining complex functionalities, Composition might be a preferable design pattern.
                   </aside>
                 </section>
+
+                <section>
+                  <h1>Multiple Inheritance</h1>
+                  <h2>Be careful!</h2>
+
+                  <pre>
+                    <code class="python">
+ >>> class A(object):
+ ...     def whoami(self):
+ ...         print('A.whoami')
+ ...
+ >>> class B(A):
+ ...     def whoami(self):
+ ...         print('B.whoami')
+ ...
+ >>> class C(A):
+ ...     def whoami(self):
+ ...         print('C.whoami')
+ ...
+ >>> class D(B, C):
+ ...     pass
+ >>> D().whoami()
+ B.whoami
+                    </code>
+                  </pre>
+                </section>  
 
                 <section>
                   <h1>Composition</h1>
@@ -352,12 +402,12 @@ class BaseAPResultCollection(object):
         self.client = client
         # ...
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
                   <h1>Composition</h1>
-            
+
                   <p>BaseAPResultCollection <em>has a</em> client (<em>AP</em>)</p>
                 </section>
 
@@ -388,7 +438,7 @@ class FilesystemAP(AP):
         return open(full_path)
                     </code>
                   </pre>
-              
+
                   <aside class="notes">
                     We can alter the behavior of BaseAPResultCollection by specifying a different type of object for client.  In this example, we have a client that loads files from the filesystem instead of a remote FTP server.
                   </aside>
@@ -410,7 +460,7 @@ class UpperOut(object):
         return getattr(self._outfile, name)
                      </code>
                    </pre>
-                   
+
                    <aside class="notes">
                      Delegation is a design pattern based on composition where methods on the outer class call through to the member class unless overridden.
 
@@ -419,8 +469,49 @@ class UpperOut(object):
                 </section>
 
                 <section>
+                   <h1>Delegation</h1>
+
+                   <pre>
+                     <code class="python">
+>>> with open('/Users/ghing/Desktop/test.txt', 'w') as f:
+...     f.write(s)
+...
+>>> with open('/Users/ghing/Desktop/test.txt') as f:
+...     print(f.read())
+...
+nicar
+>>> with open('/Users/ghing/Desktop/test_upper.txt', 'w') as f:
+...     upperf = UpperOut(f)
+...     upperf.write(s)
+...
+>>> with open('/Users/ghing/Desktop/test_upper.txt', 'r') as f:
+...     upperf = UpperOut(f)
+...     print(upperf.read())
+...
+NICAR
+                     </code>
+                   </pre>
+
+                   <aside class="notes">
+                     This shows why <em>UpperOut</em> is a good choice for delegation.  We never really instantiate file objects.  Rather, we get an instance using <em>open()</em>.
+                   </aside>
+                </section>   
+
+                <section>
+                  <h1>Let's compose!</h1>
+
+                  <p>Implement the methods in <em><a href="https://github.com/ghing/nicar2015_advanced_python/blob/master/pycar_advanced/oo.py">pycar_advanced/oo.py</a></em> to use composition to implement a basic election results fetcher/loader.  Then these tests should pass:</p>
+
+                  <pre>
+                    <code class="bash">
+nosetests tests/test_oo.py
+                    </code>
+                  </pre>
+                </section>
+
+                <section>
                   <h1>Functional Programming</h1>
-                   
+
                   <ul>
                     <li>Iterators</li>
                     <li>Generators</li>
@@ -435,18 +526,18 @@ class UpperOut(object):
 
                 <section>
                   <h1>Iterators</h1>
-                  
+
                   <ul>
                       <li>A Python language feature</li>
                       <li>Represent a stream of data</li>
                       <li>Have a <em>next()</em> method</li>
                       <li>Raise <em>StopIteration</em> when there are no more items</li>
-                  </ul>    
+                  </ul>
                 </section>
 
                 <section>
                   <h1>Iterators</h1>
-         
+
                   <pre>
                     <code class="python">
 >>> L = [1,2,3]
@@ -463,8 +554,8 @@ Traceback (most recent call last):
   StopIteration
 >>>
                     </code>
-                  </pre>  
-                </section>   
+                  </pre>
+                </section>
 
                 <section>
                    <h1>Generators</h1>
@@ -476,11 +567,11 @@ Traceback (most recent call last):
                        <li>Can generate infinite sequences</li>
                        <li>Use less memory</li>
                    </ul>
-               </section>   
+               </section>
 
                 <section>
                   <h1>Generators</h1>
-      
+
                   <p><em><a href="https://github.com/pudo/dataset/blob/master/dataset/freeze/config.py">dataset/freeze/config.py</a></em> from <a href="https://github.com/pudo/dataset/">dataset</a>.
 
                   <pre>
@@ -515,28 +606,28 @@ class Configuration(object):
 nosetests \
 tests/test_functional.py:FunctionalTestCase.test_generate_results
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
                   <h1>Filtering and transforming iterables</h1>
                   <pre>
                     <code class="python">
->>> vals = [1, 2, 3]                    
->>> map(lambda x: x*x, vals)    
+>>> vals = [1, 2, 3]
+>>> map(lambda x: x*x, vals)
 [1, 4, 9]
 >>> filter(lambda x: (x % 2) == 0, vals)
 [2]
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
                    <h1>Lambda expressions</h1>
                    <pre>
                       <code class="python">
->>> vals = [1, 2, 3]                    
->>> map(lambda x: x*x, vals)    
+>>> vals = [1, 2, 3]
+>>> map(lambda x: x*x, vals)
 [1, 4, 9]
 >>> def square(x):
 >>>     return x*x
@@ -548,20 +639,20 @@ tests/test_functional.py:FunctionalTestCase.test_generate_results
                    <aside class="notes">
                      Lambda expressions are a way to define small functions.  You can always just define the function, and in many cases, that's preferable.
                    </aside>
-               </section>   
+               </section>
 
                <section>
                   <h1>List comprehensions</h1>
 
                   <pre>
                     <code class="python">
->>> vals = [1, 2, 3]                    
+>>> vals = [1, 2, 3]
 >>> [x * x for x in vals]
 [1, 4, 9]
 >>> [x for x in vals if (x % 2) == 0]
 [2]
                     </code>
-                  </pre>  
+                  </pre>
 
                   <aside class="notes">
                     Python has a language feature called list comprehensions that are generally preferred to using map and filter.
@@ -578,7 +669,7 @@ tests/test_functional.py:FunctionalTestCase.test_generate_results
 nosetests \
 tests/test_functional.py:FunctionalTestCase.test_candidate_first_names
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
@@ -593,7 +684,7 @@ tests/test_functional.py:FunctionalTestCase.test_candidate_first_names
 >>> even_iter.next()
 2
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
@@ -601,10 +692,10 @@ tests/test_functional.py:FunctionalTestCase.test_candidate_first_names
 
                   <pre>
                     <code class="python">
-rahm = [r for r in results if r.candidate_name == "Rahm Emanuel"][0]                    
-rahm = next(r for r in results if r.candidate_name == "Rahm Emanuel")                    
+rahm = [r for r in results if r.candidate_name == "Rahm Emanuel"][0]
+rahm = next(r for r in results if r.candidate_name == "Rahm Emanuel")
                     </code>
-                  </pre>  
+                  </pre>
 
                   <aside class="notes">
                     Generator expressions are a really great way to do a quick and dirty selection of an element.  What's the difference between these two examples?
@@ -622,7 +713,7 @@ rahm = next(r for r in results if r.candidate_name == "Rahm Emanuel")
 >>> isinstance(f, object)
 True
                     </code>
-                  </pre>   
+                  </pre>
                 </section>
 
                 <section>
@@ -630,14 +721,14 @@ True
 
                   <pre>
                     <code class="python">
->>> from functools import reduce                    
+>>> from functools import reduce
 >>> def concat(s1, s2):
 >>>     return s1 + " " + s2
 >>> strgs = ["NICAR", "is", "great"]
 >>> reduce(concat, strgs)
 'NICAR is great'
                     </code>
-                  </pre>   
+                  </pre>
                 </section>
 
                 <section>
@@ -657,7 +748,7 @@ Traceback (most recent call last):
   File "&lt;stdin&gt;", line 1, in &lt;module&gt;
 NameError: name 'concat' is not defined
                     </code>
-                  </pre>  
+                  </pre>
                 </section>
 
                 <section>
@@ -676,19 +767,19 @@ Geoff Hing
                   </pre>
 
                   <aside class="notes">
-                    Just as functions can be arguments to other functions, functions can also return functions. This function returns a function that prints the name specified by the `first_name` and `last_name` arguments. 
+                    Just as functions can be arguments to other functions, functions can also return functions. This function returns a function that prints the name specified by the `first_name` and `last_name` arguments.
 
                     This is an example of a "closure".  The instance of `name_fn` remembers the enclosing namespace (i.e. the values of `first_name` and `last_name`) from when it was declared.
 
                     FYI, [closures in Python are late-binding](http://docs.python-guide.org/en/latest/writing/gotchas/#late-binding-closures).
                   </aside>
-                </section>  
+                </section>
 
                 <section>
                   <h1>Decorators</h1>
 
                   <p>From the Chicago Tribune's electioncenter2 Fabfile. Fabric makes <a href="http://fabric.readthedocs.org/en/1.8/api/core/decorators.html">heavy use of decorators</a>.</p>
-                  
+
                   <pre>
                     <code class="python">
 @roles('admin')
@@ -700,7 +791,7 @@ def deploy():
                   </pre>
 
                   <aside class="notes">
-                    This is an example of a Fabric task that we use to deploy our elections application.  It uses Fabric's `roles` decorator to define the hosts that this task will be run on. 
+                    This is an example of a Fabric task that we use to deploy our elections application.  It uses Fabric's `roles` decorator to define the hosts that this task will be run on.
                     From http://docs.python-guide.org/en/latest/writing/structure/#decorators:
 
                     This mechanism is useful for separating concerns and avoiding external un-related logic ‘polluting’ the core logic of the function or method. A good example of a piece of functionality that is better handled with decoration is memoization or caching: you want to store the results of an expensive function in a table and use them directly instead of recomputing them when they have already been computed. This is clearly not part of the function logic.
@@ -724,7 +815,7 @@ def deploy():
 >>> decorated()
 Geoff Hing
                     </code>
-                  </pre>  
+                  </pre>
 
                 </section>
 
@@ -739,15 +830,81 @@ Geoff Hing
 >>> me()
 Geoff Hing
                     </code>
-                  </pre>  
+                  </pre>
 
                   <aside class="notes">
-                    In the previous slide, we just called our decorator function to wrap the `me()` function, but Python offers special syntax for decorating functions. 
+                    In the previous slide, we just called our decorator function to wrap the `me()` function, but Python offers special syntax for decorating functions.
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Decorators</h1>
+                  <pre>
+                    <code class="python">
+>>> @log_output
+... def me():
+...     return "Geoff Hing"
+...
+>>> me()
+Geoff Hing
+                    </code>
+                  </pre>
+
+                  <aside class="notes">
+                    In the previous slide, we just called our decorator function to wrap the `me()` function, but Python offers special syntax for decorating functions.
+                  </aside>
+                </section>
+
+                <section>
+                  <h1>Decorators</h1>
+                  <pre>
+                    <code class="python">
+>>> import logging
+>>> def log_output(f):
+...     def inner():
+...         output = f()
+...         logging.debug(output)
+...     return inner
+>>>
+                    </code>
+                  </pre>
+
+                  <aside class="notes">
+                    In the previous slide, we just called our decorator function to wrap the `me()` function, but Python offers special syntax for decorating functions.
                   </aside>
                 </section>
 
                 <section>
                   <h1>Let's write a decorator!</h1>
+
+                  <p>Implement the <em>run_query()</em> function <em><a href="https://github.com/ghing/nicar2015_advanced_python/blob/master/pycar_advanced/decorators.py">pycar_advanced/decorators.py</a></em>. We want to be able to call the <em>candidates()</em> function like this:</p>
+
+                  <pre>
+                    <code class="python">
+from pycar_advanced.query import candidates
+
+# Just runs query
+candidates()
+
+# Runs query and outputs the SQL text
+candidates(show_sql=True)
+
+# Only outputs the SQL text
+candidates(show_sql=True, dry_run=True)
+                    </code>
+                  </pre>
+                </section>
+
+                <section>
+                  <h1>Let's write a decorator!</h1>
+
+                  <p>These tests should pass:</p>
+
+                  <pre>
+                    <code class="bash">
+nosetests tests/test_decorators.py
+                    </code>
+                  </pre>
                 </section>
 			</div>
 		</div>
